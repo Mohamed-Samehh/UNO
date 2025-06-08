@@ -237,7 +237,7 @@ function updateGameScreen() {
 
     // Update game stats
     document.getElementById('deckCount').textContent = gameState.deckCount;
-    document.getElementById('direction').textContent = gameState.direction === 1 ? '→' : '←';
+    document.getElementById('direction').textContent = gameState.direction === 1 ? 'right' : 'left';
 
     // Update top card
     if (gameState.topCard) {
@@ -276,9 +276,14 @@ function updateTopCard(card) {
 
 function updateCurrentColor(color) {
     const colorDisplay = document.getElementById('currentColorDisplay');
+    const colorIndicator = document.querySelector('.current-color-indicator');
+    
     colorDisplay.textContent = color.charAt(0).toUpperCase() + color.slice(1);
     colorDisplay.style.color = getColorHex(color);
     colorDisplay.style.fontWeight = 'bold';
+    
+    // Update the color indicator circle
+    colorIndicator.style.backgroundColor = getColorHex(color);
 }
 
 function updateOtherPlayers() {
@@ -368,6 +373,14 @@ function canPlayCard(card) {
 
 function playCard(cardIndex) {
     const card = playerHand[cardIndex];
+    
+    // Check if it's the player's turn first
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+    if (!currentPlayer || currentPlayer.id !== currentPlayerId) {
+        showMessage('Wait for your turn', 'warning');
+        return;
+    }
+    
     if (!canPlayCard(card)) {
         showMessage('Cannot play this card', 'error');
         return;

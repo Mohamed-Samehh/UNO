@@ -41,36 +41,35 @@ function initializeSocket() {
         document.getElementById('gameCodeDisplay').textContent = currentGameId;
         showScreen('lobbyScreen');
         showMessage('Joined game successfully!', 'success');
-    });    socket.on('gameState', (state) => {
-        console.log('Received gameState:', state);
+    });
+
+    socket.on('gameState', (state) => {
         gameState = state;
         updateGameDisplay();
-    });socket.on('gameStarted', () => {
-        console.log('Game started event received');
+    });
+
+    socket.on('gameStarted', () => {
         showScreen('gameScreen');
         showMessage('Game started!', 'success');
-    });socket.on('playerHand', (hand) => {
-        console.log('Received playerHand:', hand);
+    });
+
+    socket.on('playerHand', (hand) => {
         playerHand = hand;
         updatePlayerHand();
-    });socket.on('cardPlayed', (data) => {
+    });
+
+    socket.on('cardPlayed', (data) => {
         if (data.hasUno) {
             showMessage(`${getPlayerName(data.playerId)} has UNO!`, 'info');
-            // Add celebration effect
-            document.body.classList.add('celebration');
-            setTimeout(() => document.body.classList.remove('celebration'), 2000);
         }
         if (data.hasWon) {
             showMessage(`${getPlayerName(data.playerId)} wins!`, 'success');
-            // Add victory celebration
-            createConfetti();
         }
     });
 
     socket.on('gameWon', (data) => {
         const winnerName = getPlayerName(data.winner);
         showMessage(`🎉 ${winnerName} wins the game! 🎉`, 'success');
-        createConfetti();
         setTimeout(() => {
             if (confirm('Game ended! Would you like to return to the main menu?')) {
                 location.reload();
@@ -80,12 +79,6 @@ function initializeSocket() {
 
     socket.on('cardDrawn', (card) => {
         showMessage('Card drawn!', 'info');
-        // Add draw animation to the deck
-        const deck = document.getElementById('drawPile');
-        if (deck) {
-            deck.style.transform = 'scale(1.1)';
-            setTimeout(() => deck.style.transform = '', 200);
-        }
     });
 
     socket.on('playerLeft', (playerId) => {
@@ -113,36 +106,9 @@ function showMessage(text, type = 'info') {
     message.textContent = text;
     messageContainer.appendChild(message);
 
-    // Add entrance animation
-    message.style.opacity = '0';
-    message.style.transform = 'translateX(100%) scale(0.8)';
-    
-    requestAnimationFrame(() => {
-        message.style.opacity = '1';
-        message.style.transform = 'translateX(0) scale(1)';
-    });
-
     setTimeout(() => {
-        message.style.opacity = '0';
-        message.style.transform = 'translateX(100%) scale(0.8)';
-        setTimeout(() => message.remove(), 300);
+        message.remove();
     }, 4000);
-}
-
-// Add particle effect
-function createParticles(element, color = '#ffd700') {
-    const rect = element.getBoundingClientRect();
-    for (let i = 0; i < 8; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.background = color;
-        particle.style.left = (rect.left + rect.width / 2) + 'px';
-        particle.style.top = (rect.top + rect.height / 2) + 'px';
-        particle.style.animationDelay = (i * 100) + 'ms';
-        document.body.appendChild(particle);
-        
-        setTimeout(() => particle.remove(), 1000);
-    }
 }
 
 // Setup screen handlers
@@ -194,16 +160,10 @@ document.getElementById('leaveLobbyBtn').addEventListener('click', () => {
 
 // Game screen handlers
 document.getElementById('drawCardBtn').addEventListener('click', () => {
-    const btn = document.getElementById('drawCardBtn');
-    btn.style.transform = 'scale(0.95)';
-    setTimeout(() => btn.style.transform = '', 150);
     socket.emit('drawCard');
 });
 
 document.getElementById('passTurnBtn').addEventListener('click', () => {
-    const btn = document.getElementById('passTurnBtn');
-    btn.style.transform = 'scale(0.95)';
-    setTimeout(() => btn.style.transform = '', 150);
     socket.emit('passTurn');
 });
 
@@ -211,29 +171,12 @@ document.getElementById('passTurnBtn').addEventListener('click', () => {
 document.querySelectorAll('.color-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const color = btn.dataset.color;
+        colorChooserModal.classList.remove('active');
         
-        // Add click animation
-        btn.style.transform = 'scale(0.9)';
-        createParticles(btn, getCardColor(color));
-        
-        setTimeout(() => {
-            btn.style.transform = '';
-            colorChooserModal.classList.remove('active');
-            
-            if (pendingWildCard !== null) {
-                socket.emit('playCard', { cardIndex: pendingWildCard, chosenColor: color });
-                pendingWildCard = null;
-            }
-        }, 200);
-    });
-    
-    // Add hover effect
-    btn.addEventListener('mouseenter', () => {
-        btn.style.transform = 'scale(1.15) translateY(-4px)';
-    });
-    
-    btn.addEventListener('mouseleave', () => {
-        btn.style.transform = '';
+        if (pendingWildCard !== null) {
+            socket.emit('playCard', { cardIndex: pendingWildCard, chosenColor: color });
+            pendingWildCard = null;
+        }
     });
 });
 
@@ -329,26 +272,13 @@ function updateTopCard(card) {
     }
     
     topCardElement.textContent = cardText;
-    
-    // Add update animation
-    topCardElement.style.transform = 'scale(1.1) rotate(5deg)';
-    setTimeout(() => {
-        topCardElement.style.transform = 'scale(1) rotate(0deg)';
-    }, 300);
 }
 
 function updateCurrentColor(color) {
     const colorDisplay = document.getElementById('currentColorDisplay');
-    const colorIndicator = document.querySelector('.current-color-indicator');
-    
     colorDisplay.textContent = color.charAt(0).toUpperCase() + color.slice(1);
     colorDisplay.style.color = getColorHex(color);
     colorDisplay.style.fontWeight = 'bold';
-    
-    if (colorIndicator) {
-        colorIndicator.style.backgroundColor = getColorHex(color);
-        colorIndicator.classList.add(`glow-${color}`);
-    }
 }
 
 function updateOtherPlayers() {
@@ -387,23 +317,8 @@ function updateActionButtons() {
 }
 
 function updatePlayerHand() {
-    console.log('updatePlayerHand called with:', playerHand);
     const handContainer = document.getElementById('playerHand');
-    const unoBtn = document.getElementById('unoBtn');
-    
-    if (!handContainer) {
-        console.error('playerHand container not found!');
-        return;
-    }
-    
-    console.log('Clearing hand container and adding', playerHand.length, 'cards');
     handContainer.innerHTML = '';
-    
-    // Add a temporary debug message to see if this function is running
-    if (playerHand.length === 0) {
-        handContainer.innerHTML = '<div style="color: white; padding: 1rem; text-align: center;">No cards in hand</div>';
-        return;
-    }
 
     playerHand.forEach((card, index) => {
         const cardElement = document.createElement('div');
@@ -429,35 +344,12 @@ function updatePlayerHand() {
         
         cardElement.textContent = cardText;
         
-        // Add draw animation for new cards
-        cardElement.style.opacity = '0';
-        cardElement.style.transform = 'scale(0) rotate(180deg)';
-        requestAnimationFrame(() => {
-            cardElement.style.opacity = '1';
-            cardElement.style.transform = 'scale(1) rotate(0deg)';
-        });
-          cardElement.addEventListener('click', () => {
+        cardElement.addEventListener('click', () => {
             playCard(index);
         });
 
-        console.log('Adding card to hand:', card, cardElement);
         handContainer.appendChild(cardElement);
     });
-    
-    console.log('Final hand container innerHTML length:', handContainer.innerHTML.length);
-    console.log('Hand container children count:', handContainer.children.length);
-    
-    // Show UNO button if player has 2 cards (will have 1 after playing)
-    if (playerHand.length === 2) {
-        unoBtn.style.display = 'block';
-        unoBtn.onclick = () => {
-            createParticles(unoBtn, '#ff4757');
-            showMessage('UNO!', 'success');
-            unoBtn.style.display = 'none';
-        };
-    } else {
-        unoBtn.style.display = 'none';
-    }
 }
 
 function canPlayCard(card) {
@@ -481,13 +373,6 @@ function playCard(cardIndex) {
         return;
     }
 
-    // Add play animation
-    const cardElement = document.querySelector(`#playerHand .card:nth-child(${cardIndex + 1})`);
-    if (cardElement) {
-        cardElement.classList.add('playing');
-        createParticles(cardElement, getCardColor(card.color));
-    }
-
     if (card.type === 'wild') {
         pendingWildCard = cardIndex;
         colorChooserModal.classList.add('active');
@@ -495,64 +380,6 @@ function playCard(cardIndex) {
         socket.emit('playCard', { cardIndex });
     }
 }
-
-// Helper function to get card color hex
-function getCardColor(color) {
-    switch (color) {
-        case 'red': return '#ff6b6b';
-        case 'blue': return '#74b9ff';
-        case 'green': return '#55efc4';
-        case 'yellow': return '#fdcb6e';
-        default: return '#a29bfe';
-    }
-}
-
-// Create confetti effect for celebrations
-function createConfetti() {
-    const colors = ['#ff6b6b', '#74b9ff', '#55efc4', '#fdcb6e', '#a29bfe'];
-    const confettiContainer = document.createElement('div');
-    confettiContainer.style.position = 'fixed';
-    confettiContainer.style.top = '0';
-    confettiContainer.style.left = '0';
-    confettiContainer.style.width = '100%';
-    confettiContainer.style.height = '100%';
-    confettiContainer.style.pointerEvents = 'none';
-    confettiContainer.style.zIndex = '9999';
-    document.body.appendChild(confettiContainer);
-
-    for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.position = 'absolute';
-        confetti.style.width = '10px';
-        confetti.style.height = '10px';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.top = '-10px';
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        confetti.style.animation = `confettiFall ${2 + Math.random() * 3}s linear forwards`;
-        confettiContainer.appendChild(confetti);
-    }
-
-    setTimeout(() => {
-        document.body.removeChild(confettiContainer);
-    }, 5000);
-}
-
-// Add confetti animation CSS dynamically
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes confettiFall {
-        0% {
-            transform: translateY(-10px) rotate(0deg);
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
 
 function getPlayerName(playerId) {
     if (!gameState) return 'Unknown Player';

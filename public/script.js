@@ -87,7 +87,7 @@ function initializeSocket() {
             if (result.isConfirmed) {
                 location.reload();
             }
-        }, 3000);
+        }, 5000);
     });
 
     socket.on('cardDrawn', (card) => {

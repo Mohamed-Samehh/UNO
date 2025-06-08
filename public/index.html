@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNO Multiplayer Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Game Setup Screen -->
+        <div id="setupScreen" class="screen active">
+            <div class="setup-container">
+                <h1 class="game-title">🎴 UNO Multiplayer</h1>
+                <div class="setup-card">
+                    <div class="setup-options">
+                        <div class="input-group">
+                            <label for="playerName">Your Name</label>
+                            <input type="text" id="playerName" placeholder="Enter your name" maxlength="20">
+                        </div>
+                        
+                        <div class="button-group">
+                            <button id="createGameBtn" class="btn btn-primary">Create New Game</button>
+                            <div class="divider">or</div>
+                            <div class="join-section">
+                                <input type="text" id="gameCodeInput" placeholder="Enter game code" maxlength="6">
+                                <button id="joinGameBtn" class="btn btn-secondary">Join Game</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lobby Screen -->
+        <div id="lobbyScreen" class="screen">
+            <div class="lobby-container">
+                <h2>Game Lobby</h2>
+                <div class="game-info">
+                    <div class="game-code">
+                        <label>Game Code:</label>
+                        <span id="gameCodeDisplay"></span>
+                        <button id="copyCodeBtn" class="btn-copy">📋</button>
+                    </div>
+                </div>
+                
+                <div class="players-section">
+                    <h3>Players (<span id="playerCount">0</span>/4)</h3>
+                    <div id="playersList" class="players-list"></div>
+                </div>
+                
+                <div class="lobby-actions">
+                    <button id="startGameBtn" class="btn btn-primary" disabled>Start Game</button>
+                    <button id="leaveLobbyBtn" class="btn btn-secondary">Leave Lobby</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-container">
+                <!-- Game Header -->
+                <div class="game-header">
+                    <div class="game-info-bar">
+                        <div class="current-player">
+                            <span id="currentPlayerName">Player's Turn</span>
+                            <span id="turnIndicator" class="turn-indicator">🔄</span>
+                        </div>
+                        <div class="game-stats">
+                            <span class="deck-count">Deck: <span id="deckCount">0</span></span>
+                            <span class="direction">Direction: <span id="direction">→</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Players -->
+                <div id="otherPlayers" class="other-players"></div>
+
+                <!-- Game Board -->
+                <div class="game-board">
+                    <div class="center-area">
+                        <div class="deck-area">
+                            <div id="drawPile" class="card-pile draw-pile">
+                                <div class="card card-back"></div>
+                            </div>
+                            <div id="discardPile" class="card-pile discard-pile">
+                                <div id="topCard" class="card"></div>
+                            </div>
+                        </div>
+                        <div class="current-color">
+                            Current Color: <span id="currentColorDisplay"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Player's Hand -->
+                <div class="player-area">
+                    <div class="player-info">
+                        <span id="playerNameDisplay">Your Hand</span>
+                        <div class="player-actions">
+                            <button id="drawCardBtn" class="btn btn-action">Draw Card</button>
+                            <button id="passTurnBtn" class="btn btn-action" disabled>Pass Turn</button>
+                        </div>
+                    </div>
+                    <div id="playerHand" class="player-hand"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Chooser Modal -->
+        <div id="colorChooserModal" class="modal">
+            <div class="modal-content">
+                <h3>Choose a Color</h3>
+                <div class="color-options">
+                    <button class="color-btn red" data-color="red">Red</button>
+                    <button class="color-btn blue" data-color="blue">Blue</button>
+                    <button class="color-btn green" data-color="green">Green</button>
+                    <button class="color-btn yellow" data-color="yellow">Yellow</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages/Notifications -->
+        <div id="messageContainer" class="message-container"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

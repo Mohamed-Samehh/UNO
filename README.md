@@ -23,9 +23,6 @@ npm install
 npm start
 ```
 
-### 3. Play the Game
-Open your browser and go to `http://localhost:3000`
-
 ## 🎮 How to Play
 
 1. **Create or Join Game**

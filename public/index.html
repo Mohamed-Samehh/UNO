@@ -86,14 +86,13 @@
                             <div id="discardPile" class="card-pile discard-pile">
                                 <div id="topCard" class="card"></div>
                             </div>
-                        </div>
-                        <div class="current-color">
-                            Current Color: <span id="currentColorDisplay"></span>
+                        </div>                        <div class="current-color">
+                            Current Color: 
+                            <span id="currentColorDisplay"></span>
+                            <span class="current-color-indicator"></span>
                         </div>
                     </div>
-                </div>
-
-                <!-- Player's Hand -->
+                </div>                <!-- Player's Hand -->
                 <div class="player-area">
                     <div class="player-info">
                         <span id="playerNameDisplay">Your Hand</span>
@@ -105,6 +104,9 @@
                     <div id="playerHand" class="player-hand"></div>
                 </div>
             </div>
+            
+            <!-- UNO Button -->
+            <button id="unoBtn" class="uno-btn" style="display: none;">UNO!</button>
         </div>
 
         <!-- Color Chooser Modal -->

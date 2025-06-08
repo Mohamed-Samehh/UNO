@@ -72,29 +72,6 @@ UNO/
 └── README.md         # This file
 ```
 
-## 🌐 Deployment
-
-This game is designed to be easily deployable on any platform:
-
-### Heroku
-1. Create a new Heroku app
-2. Connect your GitHub repository
-3. Deploy directly from GitHub
-
-### Railway
-1. Connect your GitHub repository
-2. Railway will automatically detect and deploy
-
-### Render
-1. Connect your GitHub repository
-2. Set build command: `npm install`
-3. Set start command: `npm start`
-
-### Local Network Play
-- Start the server with `npm start`
-- Find your local IP address (e.g., 192.168.1.100)
-- Friends can connect using `http://YOUR_IP:3000`
-
 ## 🎯 Game Features
 
 ### Real-time Synchronization
@@ -123,14 +100,6 @@ This game is designed to be easily deployable on any platform:
 - **Frontend**: Vanilla JavaScript with modern CSS
 - **Game Logic**: Complete UNO rule implementation
 - **Session Management**: Room-based multiplayer system
-
-## 🤝 Contributing
-
-Feel free to fork this project and submit pull requests for improvements!
-
-## 📝 License
-
-MIT License - feel free to use this for your own projects!
 
 ---
 

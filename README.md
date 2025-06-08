@@ -1,10 +1,10 @@
 # 🎴 UNO Multiplayer Game
 
-A real-time multiplayer UNO game built with Node.js, Socket.io, and modern web technologies. Play with 2-4 friends in real-time!
+A real-time multiplayer UNO game built with Node.js, Socket.io, and modern web technologies. Play with 2-10 friends in real-time!
 
 ## ✨ Features
 
-- 🌐 **Real-time multiplayer** - Play with 2-4 players simultaneously
+- 🌐 **Real-time multiplayer** - Play with 2-10 players simultaneously
 - 🎨 **Beautiful modern UI** - Responsive design that works on all devices
 - 🃏 **Complete UNO rules** - All special cards, proper game flow, and win conditions
 - 🔗 **Easy game sharing** - Share a simple 6-character game code with friends
@@ -32,7 +32,7 @@ npm start
 
 2. **Game Lobby**
    - Share the 6-character game code with your friends
-   - Wait for 2-4 players to join
+   - Wait for 2-10 players to join
    - Click "Start Game" when ready
 
 3. **Playing UNO**

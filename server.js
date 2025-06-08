@@ -29,7 +29,7 @@ class UnoGame {
     }
 
     addPlayer(playerId, playerName) {
-        if (this.players.length >= 4) return false;
+        if (this.players.length >= 10) return false;
         
         const player = {
             id: playerId,

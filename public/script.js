@@ -70,8 +70,21 @@ function initializeSocket() {
     socket.on('gameWon', (data) => {
         const winnerName = getPlayerName(data.winner);
         showMessage(`🎉 ${winnerName} wins the game! 🎉`, 'success');
-        setTimeout(() => {
-            if (confirm('Game ended! Would you like to return to the main menu?')) {
+        setTimeout(async () => {
+            const result = await Swal.fire({
+                title: "Game Ended!",
+                text: "Would you like to return to the main menu?",
+                icon: "success",
+                showCancelButton: true,
+                confirmButtonColor: "#667eea",
+                cancelButtonColor: "#ff6b6b",
+                confirmButtonText: "Yes, return to menu",
+                cancelButtonText: "Stay here",
+                background: "#1a1a2e",
+                color: "#ffffff"
+            });
+            
+            if (result.isConfirmed) {
                 location.reload();
             }
         }, 3000);
@@ -159,8 +172,20 @@ document.getElementById('startGameBtn').addEventListener('click', () => {
     socket.emit('startGame');
 });
 
-document.getElementById('leaveLobbyBtn').addEventListener('click', () => {
-    if (confirm('Are you sure you want to leave the lobby?')) {
+document.getElementById('leaveLobbyBtn').addEventListener('click', async () => {
+    const result = await Swal.fire({
+        title: "Leave Lobby?",
+        text: "Are you sure you want to leave the lobby?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#667eea",
+        cancelButtonColor: "#ff6b6b",
+        confirmButtonText: "Yes, leave lobby",
+        background: "#1a1a2e",
+        color: "#ffffff"
+    });
+
+    if (result.isConfirmed) {
         location.reload();
     }
 });

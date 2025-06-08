@@ -241,7 +241,6 @@ body {
 }
 
 .divider {
-    background: var(--bg-secondary);
     padding: 0 1rem;
     z-index: 2;
     position: relative;
@@ -251,6 +250,12 @@ body {
     display: flex;
     gap: 0.75rem;
     flex-direction: column;
+}
+
+.join-section button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .join-section input {

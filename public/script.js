@@ -149,6 +149,13 @@ document.getElementById('copyCodeBtn').addEventListener('click', () => {
 });
 
 document.getElementById('startGameBtn').addEventListener('click', () => {
+    const playerCount = parseInt(document.getElementById('playerCount').textContent);
+    
+    if (playerCount < 2) {
+        showMessage('You need at least one more player to start the game', 'warning');
+        return;
+    }
+
     socket.emit('startGame');
 });
 
@@ -212,8 +219,6 @@ function updateLobbyDisplay() {
         playerDiv.textContent = player.name + (player.id === currentPlayerId ? ' (You)' : '');
         playersList.appendChild(playerDiv);
     });
-
-    startBtn.disabled = gameState.players.length < 2;
 }
 
 function updateGameScreen() {
